@@ -1,0 +1,43 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        window.onload = () => {
+            const catContainer = document.getElementById('cats')
+            catContainer.innerHTML = 'I will be the cat container'
+
+            const SERVER = 'http://localhost:8080'
+
+            console.log(`the server is ${SERVER}`)            
+
+            async function loadCats () {
+                try {           
+                    const response = await fetch(`${SERVER}/cats`)
+                    if (response.ok) {
+                        const cats = await response.json()
+                        let updatedCatContent = cats.map(cat => `
+                            <div>
+                                ${cat.name}
+                            </div>
+                        `).join('')
+                        catContainer.innerHTML = updatedCatContent
+                    } else {
+                        throw response
+                    }
+                } catch (error) {
+                    console.warn(error)
+                }
+            } 
+            
+            loadCats()
+        }
+        // document.addEventListener('DOMContentLoaded', () => {})
+    </script>
+</head>
+<body>
+    <h1>Cat list</h1>
+    <div id="cats"></div>
+</body>
+</html>
